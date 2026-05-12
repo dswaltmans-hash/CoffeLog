@@ -1,0 +1,271 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// KOFFIEBONEN TOEVOEGEN — Plak dit tijdelijk als artifact in Claude.ai
+// en klik “Run”. Het voegt de drie nieuwe koffies toe aan je logboek
+// zonder de bestaande bonen te verwijderen.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const NIEUWE_KOFFIES = [
+// ── 1. Paso Paso — Syoum Family, Enat Buna & 74412 Natural ──────────────
+{
+id: “paso-syoum-guji-natural”,
+name: “Syoum Family — Bette Buna Natural”,
+roaster: “Paso Paso”,
+country: “Ethiopië”,
+region: “Guji Meguda, Oromia”,
+altitude: “1998–2200m”,
+producer: “Hester Westerveld-Syoum & Dawit Syoum (Bette Buna)”,
+variety: “Enat Buna & 74412”,
+processing: “Natural”,
+processingDetail:
+“Rijpe koffiepitjes worden met de hand geplukt van semi-bos- en wilde bosplots op de 220 hectare grote Bette Buna-boerderij. Na het plukken worden de onverwerkte kersjes uitgespreid op verhoogde Afrikaanse droogbedden. Gedurende 3,5 week worden ze gedroogd in de Ethiopische zon, waarbij ze elke dag regelmatig worden gekeerd. De eerste helft van de droogtijd vindt plaats in vol zonlicht voor snelle initiële droging; de tweede helft in de schaduw voor een langzame, gelijkmatige afdroging die de suikers maximaal kan ontwikkelen. Dit resulteert in een zoete, complexe boon met uitgesproken fruitige fermentatienoten.”,
+roastLevel: “Licht”,
+roastType: “Filter”,
+tastingNotes: [“Crème Brûlée”, “Cranberry”, “Bloemig”, “Melkig”],
+flavorDescription:
+“Een weelderige, zoete koffie die meteen indruk maakt met karamelachtige crème brûlée. Daarna volgen helder zure cranberrytonen die de zoetheid in balans brengen. De naturelverwerking geeft een romige, melkige body die de koffie bijzonder toegankelijk maakt. Bij het afkoelen komen bloemige noten naar voren — jasmijn en rozenwater — typisch voor het wilde boskarakter van de Guji-regio. Een uitstekende instapkoffie voor naturelliefhebbers en tegelijk complex genoeg voor de gevorderde smaakontdekker.”,
+brewV60: {
+dose: “15g”,
+water: “250g”,
+temp: “92°C”,
+technique:
+“4:6-methode (Tetsu Kasuya): Verdeel het water in vijf gelijke gieten van 50g. Eerste giet (0:00): 50g bloom, 45 seconden laten staan — dit activeert de boon en zet de zoetheid. Tweede giet (0:45): nogmaals 50g in het midden gieten om de zoetheid verder te versterken. Wacht tot het water door de koffie is getrokken (~1:30). Derde giet (1:30): 50g. Vierde giet (2:00): 50g. Vijfde giet (2:30): 50g. Laat volledig uitlopen.”,
+time: “3:30–3:45”,
+grindBricks: “5.7 (85 clicks)”,
+whyThisTechnique:
+“De 4:6-methode is bij uitstek geschikt voor deze naturelkoffie: de eerste twee gieten (40%) bepalen de zoetheid en zuurgraad. Door beide gieten gelijkmatig te houden benadruk je de crème brûlée-zoetheid en temper je het scherpe zuur van de cranberry. De drie laatste gieten (60%) bepalen de sterkte — je kunt ze iets verder uit elkaar spreiden voor een lichtere, bloemigere kop.”,
+},
+brewB75: {
+dose: “15g”,
+water: “250g”,
+temp: “92°C”,
+technique:
+“45g bloom (45s) met één zachte ronddraaiende beweging (swirl). Eerste giet tot 150g in een langzame cirkel van buiten naar binnen. Wacht tot het waterpeil bijna op het koffiebed staat (~2:00). Tweede giet tot 250g, opnieuw van buiten naar binnen. Laat volledig uitlopen zonder te roeren.”,
+time: “3:15–3:30”,
+grindBricks: “5.5 (82 clicks)”,
+agitation:
+“Alleen een zachte swirl tijdens de bloom. De flat bottom van de B75 zorgt voor een gelijkmatig poederbed, waardoor de extractie homogeen verloopt — extra agitatie zou de delicate bloemige noten overheersen en te veel fermentiefruit naar voren brengen.”,
+},
+espresso: null,
+restDays: “7–14 dagen na branddatum (filterroast)”,
+dateAdded: “2026-05-12”,
+heroColor: “#D2691E”,
+},
+
+// ── 2. Grounded Craft Coffee — Blackberry Punch, Ombligon Coferment ──────
+{
+id: “grounded-blackberry-punch”,
+name: “Blackberry Punch — Ombligon Coferment”,
+roaster: “Grounded Craft Coffee”,
+country: “Colombia”,
+region: “Acevedo, Huila”,
+altitude: “±1700m”,
+producer: “Sergio Darío Aranda (Finca Anaya)”,
+variety: “Ombligon”,
+processing: “Thermische schok — co-fermentatie”,
+processingDetail:
+“Een bijzonder tweestaps-fermentatieproces op Finca Anaya. Eerst ondergaan de rijpe kersjes een thermische schok: korte blootstelling aan stoomhitte gevolgd door snel afkoelen in koud water. Dit breekt de celwanden van de kers open en maakt het voor de fermentatiemicro-organismen gemakkelijker om snel en diep te werken. Vervolgens worden de kersjes samen met ‘mosto’ — een vergist sap van Andische braambes (mora de Castilla) — gefermenteerd in gesloten tanks. De Ombligon-variëteit is een lokale mutatie herkenbaar aan het navelvormige putje in de zaadboon; hij staat dicht bij Bourbon en Pacamara qua eigenschappen maar heeft een extra fruitige expressiviteit. Het co-fermentatieproces duurt 48–72 uur bij gecontroleerde temperatuur, waarna de bonen op verhoogde bedden worden gedroogd.”,
+roastLevel: “Licht”,
+roastType: “Filter”,
+tastingNotes: [“Braambes”, “Pomelo”, “Passievrucht”, “Berryjam”],
+flavorDescription:
+“Meteen herkenbaar: uitbundige, frisse braambes — als vers fruit, niet als siroop. De pomelo geeft een elegante citrusbitterheid die de intensiteit van het fermentatieproces mooi tempert. Passievrucht verschijnt in het middenpalaat met een tropisch randje. De afdronk is sappig en lang, met een subtiele jam-achtige zoetheid die doet denken aan handgepakte mora’s. Een expressiever, experimenteler profiel dat zowel de cofermentatiemethode als de Ombligon-variëteit eer aandoet.”,
+brewV60: {
+dose: “15g”,
+water: “240g”,
+temp: “90°C”,
+technique:
+“Eenvoudige 3-giet methode voor maximale fruitexpressie: Bloom (0:00): 45g, 40 seconden. Zacht roeren met een lepel om alle koffie te wetten. Eerste giet (0:40): langzaam gieten tot 140g in concentrische cirkels. Tweede giet (1:30): langzaam gieten tot 240g, opnieuw van buiten naar binnen. Laat volledig uitlopen zonder swirl — de cofermentatiearoma’s zijn vluchtig en extra agitatie kan bitterheid opwekken.”,
+time: “3:00–3:20”,
+grindBricks: “5.6 (84 clicks)”,
+whyThisTechnique:
+“De lagere watertemperatuur (90°C) is bewust gekozen: de intense fermentatienoten van dit type co-ferment kunnen bij hogere temperaturen scherp of bijna alcoholisch worden. De driegietmethode geeft voldoende extractie zonder dat de braambes-intensiteit doorslaat naar een wijnachtig of overfermenteernd profiel. Het V60 is hier de voorkeursdripper voor maximale helderheid en fruitexpressie.”,
+},
+brewB75: {
+dose: “15g”,
+water: “240g”,
+temp: “90°C”,
+technique:
+“45g bloom (40s). Eerste giet tot 150g in langzame spiraal. Wacht tot waterpeil daalt (~1:45). Tweede giet tot 240g. De flat bottom benadrukt de body en jam-achtiger textuur van dit coferment.”,
+time: “3:00–3:15”,
+grindBricks: “5.4 (81 clicks)”,
+agitation:
+“Geen agitatie na de bloom — de B75 geeft al een volwaardig extract dankzij het gelijkmatige poederbed. Extra roeren kan bij dit type fermentatiekoffie de bitterheid verhogen.”,
+},
+espresso: null,
+restDays: “10–21 dagen na branddatum”,
+dateAdded: “2026-05-12”,
+heroColor: “#6B2D5E”,
+},
+
+// ── 3. The Barn — Santa Clara, Antigua Guatemala (Omni) ─────────────────
+{
+id: “thebarn-santa-clara-antigua”,
+name: “Santa Clara — Antigua”,
+roaster: “The Barn”,
+country: “Guatemala”,
+region: “Antigua, Volcán de Agua”,
+altitude: “1650–1700m”,
+producer: “Ricardo Zelaya (4e generatie)”,
+variety: “Caturra & Bourbon”,
+processing: “Washed”,
+processingDetail:
+“Traditioneel gewassen proces op de eigen nat- en droogmolen van Finca Santa Clara. Na de oogst worden de rijpe kersjes gepulped om de buitenste schil te verwijderen. Vervolgens worden de gepulpte bonen 14–22 uur gefermenteerd in betegelde tanks met schoon vulkaanwater. Na het wassen worden de bonen eerst gedroogd op patio’s en daarna overgebracht naar verhoogde droogbedden onder een kas-achtige serre met verstelbare wanden — een door Ricardo Zelaya ontworpen systeem dat precieze controle biedt over luchtstroming, temperatuur en luchtvochtigheid. Het drogen duurt circa 21 dagen, een bewust traag proces dat bijdraagt aan de zachte, siroperige textuur waarvoor Santa Clara bekend staat.”,
+roastLevel: “Licht-medium”,
+roastType: “Omni”,
+tastingNotes: [“Esdoornsiroop”, “Gele pruim”, “Mout”, “Gebalanceerd”],
+flavorDescription:
+“Santa Clara is The Barn’s klassieke dagelijkse drinker: balans als kenmerk. Zoet als esdoornsiroop op de neus — warm, karamelachtig, niet overheersend. Gele pruim (mirabelle) in het middenpalaat met een zachte, sappige zuurgraad. De moutachtige ondertoon geeft diepte en maakt het bijzonder prettig als melkkoffie. Als espresso ronder en romiger, als filter helder en elegant. Een alleskunner die zowel beginners als gevorderden zal bekoren.”,
+brewV60: {
+dose: “15g”,
+water: “250g”,
+temp: “93°C”,
+technique:
+“Continue-gietmethode zoals aanbevolen op de productpagina van The Barn: Bloom (0:00): 40g (~95ml), 40 seconden laten staan. Eerste giet (0:40): langzaam en continu gieten tot 250g in één vloeiende beweging in concentrische cirkels. Geen swirl, geen extra agitatie — laat de koffie rustig uitlopen.”,
+time: “2:30–2:45”,
+grindBricks: “5.5 (83 clicks)”,
+whyThisTechnique:
+“The Barn zelf adviseert voor de Santa Clara een ratio van ~1:17 op 93°C met een Comandante op 23 clicks (= Bricks 5.5). De continue-gietmethode past bij het gebalanceerde, schone profiel van deze washed Guatemalteek: geen manipulatie nodig, de koffie doet het werk. Te veel agitatie zou de delicate pruimnoten kunnen opbreken.”,
+},
+brewB75: {
+dose: “15g”,
+water: “250g”,
+temp: “93°C”,
+technique:
+“40g bloom (40s) met licht roeren. Eerste giet tot 130g in langzame concentrische cirkels. Wacht tot waterpeil daalt (~1:45). Tweede giet tot 250g. Laat volledig uitlopen. De B75 benadrukt de siroperige body van deze washed Bourbon/Caturra blend uitstekend.”,
+time: “2:45–3:00”,
+grindBricks: “5.3 (80 clicks)”,
+agitation:
+“Licht roeren tijdens de bloom, daarna geen agitatie. De flat bottom geeft al een volle, gelijkmatige extractie die de moutachtige body van Santa Clara mooi naar voren brengt.”,
+},
+espresso: {
+dose: “18g”,
+yield: “36g”,
+time: “26–30s”,
+temp: “93°C”,
+grindBricks: “2.5 (37 clicks)”,
+tips:
+“De Santa Clara is een omniroast die uitstekend werkt op de Rancilio Silvia. Temperature surfing: flush het groepshoofd tot het verwarmingslampje aangaat, wacht 10 seconden en start de extractie. Door de licht-medium branding is 93°C een goed startpunt — te heet en de pruimnoten worden bitter, te koud en de mout domineert. Ratio 1:2 (18g → 36g) geeft een ronde, volle shot. Probeer ook als lungo (18g → 45g, 32–36s) voor een helderdere expressie van de esdoornsiroop.”,
+},
+restDays: “8–16 dagen na branddatum (filter), 14–21 dagen (espresso)”,
+dateAdded: “2026-05-12”,
+heroColor: “#7B6043”,
+},
+];
+
+// ─── React component — tijdelijk artifact ────────────────────────────────────
+export default function VoegKoffiesToe() {
+const [status, setStatus] = React.useState(“idle”); // idle | running | done | error
+const [log, setLog] = React.useState([]);
+
+const addLog = (msg) => setLog((prev) => […prev, msg]);
+
+async function run() {
+setStatus(“running”);
+setLog([]);
+
+```
+try {
+  // 1. Haal bestaande collectie op
+  addLog("📦 Bestaande collectie ophalen...");
+  let existing = [];
+  try {
+    const result = await window.storage.get("coffee-collection");
+    if (result && result.value) {
+      existing = JSON.parse(result.value);
+      addLog(`✅ ${existing.length} bestaande bonen gevonden.`);
+    } else {
+      addLog("ℹ️ Geen bestaande collectie — we starten vers.");
+    }
+  } catch (e) {
+    addLog("⚠️ Kon bestaande collectie niet laden, we gaan verder met lege lijst.");
+  }
+
+  // 2. Verwijder duplicaten op basis van id
+  const existingIds = new Set(existing.map((c) => c.id));
+  const toAdd = NIEUWE_KOFFIES.filter((c) => {
+    if (existingIds.has(c.id)) {
+      addLog(`⏭️ "${c.name}" staat al in de collectie, overgeslagen.`);
+      return false;
+    }
+    return true;
+  });
+
+  if (toAdd.length === 0) {
+    addLog("✅ Alle koffies staan al in je collectie!");
+    setStatus("done");
+    return;
+  }
+
+  // 3. Voeg toe en sla op
+  const updated = [...existing, ...toAdd];
+  await window.storage.set("coffee-collection", JSON.stringify(updated));
+
+  toAdd.forEach((c) => addLog(`☕ "${c.name}" (${c.roaster}) toegevoegd.`));
+  addLog(`\n✅ Klaar! Collectie heeft nu ${updated.length} bonen.`);
+  addLog("🔄 Herlaad je Koffiebonenlogboek-app om de nieuwe bonen te zien.");
+  setStatus("done");
+} catch (err) {
+  addLog(`❌ Fout: ${err.message}`);
+  setStatus("error");
+}
+```
+
+}
+
+const btnStyle = {
+padding: “12px 28px”,
+fontSize: “15px”,
+fontWeight: 600,
+borderRadius: “10px”,
+border: “none”,
+cursor: status === “running” ? “not-allowed” : “pointer”,
+background: status === “done” ? “#2E7D32” : status === “error” ? “#C62828” : “#B8510D”,
+color: “#fff”,
+marginBottom: “20px”,
+};
+
+return (
+<div style={{ fontFamily: “sans-serif”, maxWidth: 540, margin: “40px auto”, padding: “0 20px” }}>
+<h2 style={{ fontSize: “20px”, marginBottom: “6px” }}>☕ Koffies toevoegen</h2>
+<p style={{ color: “#555”, fontSize: “14px”, marginBottom: “20px” }}>
+Voegt 3 nieuwe bonen toe aan je logboek zonder de bestaande te verwijderen:
+</p>
+<ul style={{ fontSize: “14px”, marginBottom: “24px”, lineHeight: 1.8 }}>
+{NIEUWE_KOFFIES.map((c) => (
+<li key={c.id}>
+<strong>{c.name}</strong> — {c.roaster}
+</li>
+))}
+</ul>
+
+```
+  <button style={btnStyle} onClick={run} disabled={status === "running"}>
+    {status === "running"
+      ? "⏳ Bezig..."
+      : status === "done"
+      ? "✅ Gedaan!"
+      : status === "error"
+      ? "❌ Opnieuw proberen"
+      : "▶ Voeg toe aan logboek"}
+  </button>
+
+  {log.length > 0 && (
+    <pre
+      style={{
+        background: "#1a1a1a",
+        color: "#e0e0e0",
+        padding: "16px",
+        borderRadius: "10px",
+        fontSize: "13px",
+        lineHeight: 1.6,
+        whiteSpace: "pre-wrap",
+      }}
+    >
+      {log.join("\n")}
+    </pre>
+  )}
+</div>
+```
+
+);
+}
