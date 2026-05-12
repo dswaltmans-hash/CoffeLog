@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Koffiebonenlogboek</title>
+
+  <!-- PWA -->
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Koffielog" />
+  <meta name="theme-color" content="#B8510D" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='38' fill='%23B8510D'/%3E%3Ctext x='90' y='125' font-size='95' text-anchor='middle'%3E%E2%98%95%3C/text%3E%3C/svg%3E" />
+
+  <!-- Fonts -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600&display=swap" rel="stylesheet" />
+
+  <!-- React -->
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { background: #FAF8F5; font-family: 'DM Sans', 'Segoe UI', sans-serif; }
+    #root { min-height: 100vh; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.15); }
+    }
+
+    /* card hover */
+    .coffee-card:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 24px rgba(44,36,24,0.10) !important;
+    }
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #C8BFB0; border-radius: 3px; }
+    /* tab scrollbar hidden on mobile */
+    .tabs-row { scrollbar-width: none; }
+    .tabs-row::-webkit-scrollbar { display: none; }
+  </style>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────
+const COFFEES = [
+  {
+    id: "sample-1",
+    name: "Gesha Village \u2014 Illubahor Forest",
+    roaster: "Manhattan Coffee Roasters",
+    country: "Ethiopi\u00eb",
+    region: "Bench Maji Zone, SNNPR",
+    altitude: "1900-2100m",
+    producer: "Gesha Village Coffee Estate",
+    variety: "Gesha 1931",
+    processing: "Washed",
+    processingDetail: "Volledig gewassen met 36-48 uur fermentatie in schoon water, vervolgens gedroogd op Afrikaanse bedden gedurende 10-14 dagen met regelmatig keren.",
+    roastLevel: "Licht",
+    roastType: "Filter",
+    tastingNotes: ["Jasmijn", "Bergamot", "Perzik", "Honing"],
+    flavorDescription: "Een uitzonderlijk complexe koffie met een bloemig-theeachtig karakter. De jasmijn komt als eerste naar voren in het aroma, gevolgd door een bergamotachtige citrushelderheid. Bij afkoeling ontvouwt zich een perzikzoetheid met een delicate honingachtige afdronk.",
+    brewV60: {
+      dose: "15g", water: "250g", temp: "93\u00b0C",
+      technique: "E\u00e9n-giet swirl-methode: 50g bloom (45s), vervolgens in \u00e9\u00e9n continue circulaire giet tot 250g. Lichte swirl na het gieten. Deze methode behoudt de delicate bloemnoten.",
+      time: "2:45-3:00", grindBricks: "5.10 (85 clicks)",
+      whyThisTechnique: "De e\u00e9n-giet methode voorkomt over-extractie van de delicate Gesha-bloemnoten en geeft maximale helderheid."
+    },
+    brewB75: {
+      dose: "15g", water: "250g", temp: "93\u00b0C",
+      technique: "40g bloom (45s) met licht roeren. Eerste giet tot 150g in concentrische cirkels. Tweede giet tot 250g. Niet swirlen na de laatste giet \u2014 de flat bottom zorgt voor gelijkmatige extractie.",
+      time: "3:00-3:15", grindBricks: "5.5 (80 clicks)",
+      agitation: "Minimaal \u2014 alleen licht roeren tijdens de bloom. De flat bottom geeft al voldoende contact."
+    },
+    espresso: null,
+    restDays: "10-21 dagen na branddatum",
+    dateAdded: "2025-12-15"
+  },
+  {
+    id: "sample-2",
+    name: "La Palma y El Tuc\u00e1n \u2014 Sidra Lactic",
+    roaster: "Gardelli Specialty Coffees",
+    country: "Colombia",
+    region: "Cundinamarca",
+    altitude: "1700-1800m",
+    producer: "La Palma y El Tuc\u00e1n",
+    variety: "Sidra",
+    processing: "Lactische fermentatie",
+    processingDetail: "Ana\u00ebrobe lactische fermentatie gedurende 120 uur in verzegelde tanks bij gecontroleerde temperatuur (18-20\u00b0C). De lactobacillen produceren melkzuur dat de koffie een romig, yoghurtachtig karakter geeft. Vervolgens langzaam gedroogd op verhoogde bedden.",
+    roastLevel: "Licht-medium",
+    roastType: "Omni",
+    tastingNotes: ["Aardbeienyoghurt", "Tropisch fruit", "Bruine suiker", "Romig"],
+    flavorDescription: "Intensief fruitig met een romige textuur die doet denken aan aardbeien-yoghurt. Het lactische fermentatieproces geeft een unieke zachtheid en complexiteit. Mango en passievrucht in de achtergrond, afgerond met bruine suiker.",
+    brewV60: {
+      dose: "16g", water: "250g", temp: "91\u00b0C",
+      technique: "4:6 methode (Tetsu Kasuya): Eerste 40% (100g) in twee gieten van 50g voor zoetheid-balans. Tweede 60% (150g) in drie gieten van 50g. De 4:6 geeft controle over de zoetheid/zuurbalans.",
+      time: "3:15-3:30", grindBricks: "5.5 (80 clicks)",
+      whyThisTechnique: "De 4:6 methode geeft maximale controle over de balans tussen het fruitige zuur en de lactische zoetheid \u2014 je kunt de eerste twee gieten aanpassen naar smaak."
+    },
+    brewB75: {
+      dose: "16g", water: "250g", temp: "91\u00b0C",
+      technique: "40g bloom (40s) met gentle swirl. E\u00e9n continue giet tot 250g in langzame concentrische cirkels. De flat bottom geeft een gelijkmatige extractie die de romige body benadrukt.",
+      time: "3:00-3:20", grindBricks: "5.3 (78 clicks)",
+      agitation: "Lichte swirl na de bloom. De flat bottom benadrukt de romige body van de lactische fermentatie."
+    },
+    espresso: {
+      dose: "18g", yield: "38g", time: "28-32s", temp: "93\u00b0C", grindBricks: "2.3 (38 clicks)",
+      tips: "Temperature surfing: flush tot het verwarmingslampje aangaat, wacht 15 seconden, start extractie. De langere ratio (1:2.1) opent de fruitige noten. Overweeg een 6-seconden pre-infusion door de hendel kort te liften."
+    },
+    restDays: "14-28 dagen na branddatum (espresso), 7-14 dagen (filter)",
+    dateAdded: "2026-01-08"
+  },
+  {
+    id: "paso-syoum-guji-natural",
+    name: "Syoum Family \u2014 Bette Buna Natural",
+    roaster: "Paso Paso",
+    country: "Ethiopi\u00eb",
+    region: "Guji Meguda, Oromia",
+    altitude: "1998\u20132200m",
+    producer: "Hester Westerveld-Syoum & Dawit Syoum (Bette Buna)",
+    variety: "Enat Buna & 74412",
+    processing: "Natural",
+    processingDetail: "Rijpe koffiepitjes worden met de hand geplukt van semi-bos- en wilde bosplots op de 220 hectare grote Bette Buna-boerderij. Na het plukken worden de onverwerkte kersjes uitgespreid op verhoogde Afrikaanse droogbedden. Gedurende 3,5 week worden ze gedroogd in de Ethiopische zon, waarbij ze elke dag regelmatig worden gekeerd. De eerste helft in vol zonlicht voor snelle initiële droging; de tweede helft in de schaduw voor een langzame afdroging die de suikers maximaal ontwikkelt.",
+    roastLevel: "Licht",
+    roastType: "Filter",
+    tastingNotes: ["Cr\u00e8me Br\u00fbl\u00e9e", "Cranberry", "Bloemig", "Melkig"],
+    flavorDescription: "Een weelderige, zoete koffie die meteen indruk maakt met karamelachtige cr\u00e8me br\u00fbl\u00e9e. Daarna volgen helder zure cranberrytonen die de zoetheid in balans brengen. De naturelverwerking geeft een romige, melkige body. Bij het afkoelen komen bloemige noten naar voren \u2014 jasmijn en rozenwater \u2014 typisch voor het wilde boskarakter van de Guji-regio.",
+    brewV60: {
+      dose: "15g", water: "250g", temp: "92\u00b0C",
+      technique: "4:6-methode (Tetsu Kasuya): Verdeel het water in vijf gieten van 50g. Bloom (0:00): 50g, 45s. Tweede giet (0:45): 50g in het midden. Wacht tot ~1:30. Derde giet: 50g. Vierde giet: 50g. Vijfde giet: 50g. Laat volledig uitlopen.",
+      time: "3:30\u20133:45", grindBricks: "5.7 (85 clicks)",
+      whyThisTechnique: "De 4:6-methode is bij uitstek geschikt voor deze naturelkoffie: de eerste twee gieten bepalen de zoetheid en zuurgraad, waardoor de cr\u00e8me br\u00fbl\u00e9e-zoetheid en cranberry-zuur perfect in balans blijven."
+    },
+    brewB75: {
+      dose: "15g", water: "250g", temp: "92\u00b0C",
+      technique: "45g bloom (45s) met \u00e9\u00e9n zachte swirl. Eerste giet tot 150g in langzame spiraal. Wacht tot waterpeil daalt (~2:00). Tweede giet tot 250g van buiten naar binnen. Laat volledig uitlopen.",
+      time: "3:15\u20133:30", grindBricks: "5.5 (82 clicks)",
+      agitation: "Alleen een zachte swirl tijdens de bloom. De flat bottom zorgt al voor gelijkmatige extractie \u2014 extra agitatie zou de delicate bloemige noten overheersen."
+    },
+    espresso: null,
+    restDays: "7\u201314 dagen na branddatum",
+    dateAdded: "2026-05-12"
+  },
+  {
+    id: "grounded-blackberry-punch",
+    name: "Blackberry Punch \u2014 Ombligon Coferment",
+    roaster: "Grounded Craft Coffee",
+    country: "Colombia",
+    region: "Acevedo, Huila",
+    altitude: "\u00b11700m",
+    producer: "Sergio Dar\u00edo Aranda (Finca Anaya)",
+    variety: "Ombligon",
+    processing: "Co-fermentatie",
+    processingDetail: "Tweestaps-fermentatieproces op Finca Anaya. Eerst ondergaan de rijpe kersjes een thermische schok: blootstelling aan stoomhitte gevolgd door snel afkoelen. Dit opent de celwanden zodat fermentatiemicro-organismen dieper kunnen werken. Vervolgens worden de kersjes samen met \u2018mosto\u2019 \u2014 vergist sap van Andische braambes (mora de Castilla) \u2014 gefermenteerd in gesloten tanks gedurende 48\u201372 uur. De Ombligon-vari\u00ebteit is een lokale mutatie herkenbaar aan het navelvormige putje in de zaadboon, verwant aan Bourbon en Pacamara.",
+    roastLevel: "Licht",
+    roastType: "Filter",
+    tastingNotes: ["Braambes", "Pomelo", "Passievrucht", "Berryjam"],
+    flavorDescription: "Meteen herkenbaar: uitbundige, frisse braambes \u2014 als vers fruit, niet als siroop. De pomelo geeft een elegante citrusbitterheid die de fermentatie-intensiteit tempert. Passievrucht in het middenpalaat met een tropisch randje. De afdronk is sappig en lang, met een subtiele jam-achtige zoetheid.",
+    brewV60: {
+      dose: "15g", water: "240g", temp: "90\u00b0C",
+      technique: "3-giet methode: Bloom (0:00): 45g, 40s, licht roeren. Eerste giet (0:40): langzaam tot 140g in concentrische cirkels. Tweede giet (1:30): langzaam tot 240g van buiten naar binnen. Geen swirl na het gieten.",
+      time: "3:00\u20133:20", grindBricks: "5.6 (84 clicks)",
+      whyThisTechnique: "Lagere temperatuur (90\u00b0C) voorkomt dat de intense fermentatienoten scherp of alcoholisch worden. Geen agitatie na het gieten houdt de braambes-expressie helder zonder bitterheid."
+    },
+    brewB75: {
+      dose: "15g", water: "240g", temp: "90\u00b0C",
+      technique: "45g bloom (40s). Eerste giet tot 150g in langzame spiraal. Wacht tot ~1:45. Tweede giet tot 240g. De flat bottom benadrukt de jam-achtige textuur van dit coferment.",
+      time: "3:00\u20133:15", grindBricks: "5.4 (81 clicks)",
+      agitation: "Geen agitatie na de bloom \u2014 extra roeren kan bij fermentatie\u00ebkoffie de bitterheid verhogen."
+    },
+    espresso: null,
+    restDays: "10\u201321 dagen na branddatum",
+    dateAdded: "2026-05-12"
+  },
+  {
+    id: "thebarn-santa-clara-antigua",
+    name: "Santa Clara \u2014 Antigua",
+    roaster: "The Barn",
+    country: "Guatemala",
+    region: "Antigua, Volc\u00e1n de Agua",
+    altitude: "1650\u20131700m",
+    producer: "Ricardo Zelaya (4e generatie)",
+    variety: "Caturra & Bourbon",
+    processing: "Washed",
+    processingDetail: "Traditioneel gewassen proces op de eigen nat- en droogmolen van Finca Santa Clara. Na de oogst worden rijpe kersjes gepulped en 14\u201322 uur gefermenteerd in betegelde tanks. Na het wassen worden de bonen gedroogd op patio's en vervolgens op verhoogde bedden onder een kas met verstelbare wanden \u2014 een door Ricardo Zelaya ontworpen systeem voor precieze controle over luchtstroming, temperatuur en luchtvochtigheid. Het drogen duurt circa 21 dagen voor maximale zoetheid en balans.",
+    roastLevel: "Licht-medium",
+    roastType: "Omni",
+    tastingNotes: ["Esdoornsiroop", "Gele pruim", "Mout", "Gebalanceerd"],
+    flavorDescription: "Santa Clara is The Barn's klassieke dagelijkse drinker: balans als kenmerk. Zoet als esdoornsiroop op de neus \u2014 warm en karamelachtig. Gele pruim (mirabelle) in het middenpalaat met een zachte, sappige zuurgraad. De moutachtige ondertoon geeft diepte en maakt het bijzonder prettig als melkkoffie. Als espresso ronder en romiger, als filter helder en elegant.",
+    brewV60: {
+      dose: "15g", water: "250g", temp: "93\u00b0C",
+      technique: "Continue-gietmethode (The Barn-advies): Bloom (0:00): 40g (~95ml), 40 seconden laten staan. Giet (0:40): langzaam en continu tot 250g in \u00e9\u00e9n vloeiende beweging in concentrische cirkels. Geen swirl, laat rustig uitlopen.",
+      time: "2:30\u20132:45", grindBricks: "5.5 (83 clicks)",
+      whyThisTechnique: "The Barn adviseert zelf voor de Santa Clara een ratio van ~1:17 op 93\u00b0C (Comandante 23 clicks = Bricks 5.5). De continue-gietmethode past bij het gebalanceerde, schone profiel van deze washed Guatemalteek."
+    },
+    brewB75: {
+      dose: "15g", water: "250g", temp: "93\u00b0C",
+      technique: "40g bloom (40s) met licht roeren. Eerste giet tot 130g in concentrische cirkels. Wacht tot waterpeil daalt (~1:45). Tweede giet tot 250g. Laat volledig uitlopen.",
+      time: "2:45\u20133:00", grindBricks: "5.3 (80 clicks)",
+      agitation: "Licht roeren tijdens de bloom, daarna geen agitatie. De flat bottom benadrukt de siroperige body van Santa Clara uitstekend."
+    },
+    espresso: {
+      dose: "18g", yield: "36g", time: "26-30s", temp: "93\u00b0C", grindBricks: "2.5 (37 clicks)",
+      tips: "Temperature surfing: flush het groepshoofd tot het verwarmingslampje aangaat, wacht 10 seconden, start extractie. Ratio 1:2 (18g \u2192 36g) geeft een ronde, volle shot. Probeer ook als lungo (18g \u2192 45g, 32\u201336s) voor een helderdere esdoornsiroop-expressie."
+    },
+    restDays: "8\u201316 dagen na branddatum (filter), 14\u201321 dagen (espresso)",
+    dateAdded: "2026-05-12"
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────
+// STORAGE  (localStorage, no service worker)
+// ─────────────────────────────────────────────────────────────────
+const STORAGE_KEY = "koffie-collectie-v2";
+
+function loadCollection() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  // Seed with built-in coffees
+  saveCollection(COFFEES);
+  return COFFEES;
+}
+
+function saveCollection(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+// ─────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────
+const FLAG = { "Ethiopi\u00eb":"🇪🇹","Colombia":"🇨🇴","Kenia":"🇰🇪","Guatemala":"🇬🇹","Brazili\u00eb":"🇧🇷","Panama":"🇵🇦","Costa Rica":"🇨🇷","Rwanda":"🇷🇼","Burundi":"🇧🇮","Peru":"🇵🇪","Honduras":"🇭🇳","El Salvador":"🇸🇻","Mexico":"🇲🇽","Indonesi\u00eb":"🇮🇩","India":"🇮🇳","Yemen":"🇾🇪","Bolivia":"🇧🇴","Tanzania":"🇹🇿","Congo":"🇨🇩","Uganda":"🇺🇬","Myanmar":"🇲🇲","China":"🇨🇳","Thailand":"🇹🇭","Vietnam":"🇻🇳","Nicaragua":"🇳🇮" };
+const flag = c => FLAG[c] || "🌍";
+
+const procColor = proc => {
+  const p = (proc||"").toLowerCase();
+  if (p.includes("washed")||p.includes("gewassen")) return {bg:"#E8F4FD",text:"#1B6B93",border:"#B4D9EF"};
+  if (p.includes("natural")||p.includes("naturel")) return {bg:"#FDE8E8",text:"#9B2335",border:"#F5B4B4"};
+  if (p.includes("honey"))                          return {bg:"#FEF3C7",text:"#92400E",border:"#FCD34D"};
+  if (p.includes("anaero")||p.includes("lacti")||p.includes("ferment")||p.includes("cofer")) return {bg:"#F3E8FF",text:"#6B21A8",border:"#D8B4FE"};
+  return {bg:"#F0F0F0",text:"#555",border:"#CCC"};
+};
+
+const roastGrad = level => {
+  const l = (level||"").toLowerCase();
+  if (l.includes("licht")&&!l.includes("medium")) return "linear-gradient(135deg,#D4A76A,#C4956A)";
+  if (l.includes("medium")&&l.includes("licht"))  return "linear-gradient(135deg,#B8865A,#A07050)";
+  if (l.includes("medium")&&!l.includes("licht")&&!l.includes("donker")) return "linear-gradient(135deg,#8B6543,#6F4E37)";
+  if (l.includes("donker"))                        return "linear-gradient(135deg,#4A3728,#2C1E14)";
+  return "linear-gradient(135deg,#A0845C,#7B6043)";
+};
+
+// ─────────────────────────────────────────────────────────────────
+// PALETTE / FONTS
+// ─────────────────────────────────────────────────────────────────
+const P = {
+  cream:"#FAF8F5", warm:"#FFFDF9", ink:"#2C2418", inkL:"#5C4F3D",
+  inkM:"#8C7E6A", accent:"#B8510D", accentBg:"#E8DDD0",
+  border:"#E8E2D8", card:"#FFFFFF"
+};
+const FD = "'Fraunces','Georgia',serif";
+const FB = "'DM Sans','Segoe UI',sans-serif";
+
+// ─────────────────────────────────────────────────────────────────
+// REACT APP
+// ─────────────────────────────────────────────────────────────────
+const { useState, useEffect, useCallback } = React;
+const h = React.createElement;
+
+// ── InfoBlock ────────────────────────────────────────────────────
+function InfoBlock({label,value}) {
+  return h("div",{style:{padding:"16px",background:P.warm,borderRadius:"12px",border:`1px solid ${P.border}`}},
+    h("h4",{style:{fontSize:"11px",fontWeight:600,color:P.inkM,margin:"0 0 4px",textTransform:"uppercase",letterSpacing:"0.5px"}},label),
+    h("p",{style:{fontSize:"15px",fontWeight:500,color:P.ink,margin:0}},value)
+  );
+}
+
+// ── BrewCard ─────────────────────────────────────────────────────
+function BrewCard({title,icon,recipe,isB75,color}) {
+  const param = (label,val) => h("div",{style:{padding:"12px",background:P.card,borderRadius:"10px",border:`1px solid ${P.border}`}},
+    h("span",{style:{fontSize:"11px",fontWeight:600,color:P.inkM,textTransform:"uppercase",letterSpacing:"0.5px",display:"block",marginBottom:"4px"}},label),
+    h("span",{style:{fontSize:"16px",fontWeight:600,color:P.ink}},val)
+  );
+  const section = (t,txt) => txt ? h("div",{style:{marginBottom:"14px"}},
+    h("h4",{style:{fontSize:"12px",fontWeight:600,color:P.ink,margin:"0 0 5px",textTransform:"uppercase",letterSpacing:"0.3px"}},t),
+    h("p",{style:{fontSize:"14px",color:P.inkL,margin:0,lineHeight:1.7}},txt)
+  ) : null;
+
+  return h("div",{style:{background:P.warm,borderRadius:"16px",padding:"24px",border:`1px solid ${P.border}`}},
+    h("div",{style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px",paddingLeft:"14px",borderLeft:`4px solid ${color}`}},
+      h("span",{style:{fontSize:"22px"}},icon),
+      h("h3",{style:{fontFamily:FD,fontSize:"20px",fontWeight:600,margin:0}},title)
+    ),
+    h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:"10px",marginBottom:"20px"}},
+      param("Dosis",recipe.dose),
+      param("Water",recipe.water),
+      param("Temperatuur",recipe.temp),
+      param("Brouwtijd",recipe.time),
+      param("Maalstand (Bricks 01S)",recipe.grindBricks)
+    ),
+    section("Giettechniek",recipe.technique),
+    section("Waarom deze methode?",recipe.whyThisTechnique),
+    isB75 && section("Agitatie-advies",recipe.agitation)
+  );
+}
+
+// ── EspressoCard ─────────────────────────────────────────────────
+function EspressoCard({recipe}) {
+  const param = (label,val) => h("div",{style:{padding:"12px",background:P.card,borderRadius:"10px",border:`1px solid ${P.border}`}},
+    h("span",{style:{fontSize:"11px",fontWeight:600,color:P.inkM,textTransform:"uppercase",letterSpacing:"0.5px",display:"block",marginBottom:"4px"}},label),
+    h("span",{style:{fontSize:"16px",fontWeight:600,color:P.ink}},val)
+  );
+  return h("div",{style:{background:P.warm,borderRadius:"16px",padding:"24px",border:`1px solid ${P.border}`}},
+    h("div",{style:{display:"flex",alignItems:"center",gap:"12px",marginBottom:"20px",paddingLeft:"14px",borderLeft:"4px solid #6A1B9A"}},
+      h("span",{style:{fontSize:"22px"}},"◈"),
+      h("h3",{style:{fontFamily:FD,fontSize:"20px",fontWeight:600,margin:0}},"Espresso — Rancilio Silvia")
+    ),
+    h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:"10px",marginBottom:"20px"}},
+      param("Dosis",recipe.dose),
+      param("Opbrengst",recipe.yield),
+      param("Extractietijd",recipe.time),
+      param("Temperatuur",recipe.temp),
+      param("Maalstand (Bricks 01S)",recipe.grindBricks)
+    ),
+    h("div",{style:{marginBottom:0}},
+      h("h4",{style:{fontSize:"12px",fontWeight:600,color:P.ink,margin:"0 0 5px",textTransform:"uppercase",letterSpacing:"0.3px"}},"Tips voor de Silvia"),
+      h("p",{style:{fontSize:"14px",color:P.inkL,margin:0,lineHeight:1.7}},recipe.tips)
+    )
+  );
+}
+
+// ── CoffeeCard ───────────────────────────────────────────────────
+function CoffeeCard({coffee,idx,onClick,onCompare,comparing}) {
+  const pc = procColor(coffee.processing);
+  return h("div",{
+    className:"coffee-card",
+    style:{background:P.card,borderRadius:"16px",overflow:"hidden",cursor:"pointer",border:`1px solid ${P.border}`,
+           transition:"transform 0.25s,box-shadow 0.25s",animation:"fadeInUp 0.5s ease both",
+           animationDelay:`${idx*70}ms`,boxShadow:"0 1px 3px rgba(44,36,24,0.04)"},
+    onClick
+  },
+    h("div",{style:{height:"6px",background:roastGrad(coffee.roastLevel)}}),
+    h("div",{style:{padding:"18px"}},
+      h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"8px"}},
+        h("span",{style:{fontSize:"13px",color:P.inkM,fontWeight:500}},`${flag(coffee.country)} ${coffee.country}`),
+        h("span",{style:{fontSize:"11px",color:P.inkM,padding:"2px 8px",background:P.cream,borderRadius:"7px"}},coffee.roastLevel)
+      ),
+      h("h3",{style:{fontFamily:FD,fontSize:"17px",fontWeight:600,margin:"0 0 3px",lineHeight:1.3,color:P.ink}},coffee.name),
+      h("p",{style:{fontSize:"13px",color:P.inkM,marginBottom:"12px"}},coffee.roaster),
+      h("div",{style:{display:"flex",gap:"6px",flexWrap:"wrap",marginBottom:"12px"}},
+        h("span",{style:{fontSize:"11px",padding:"3px 9px",borderRadius:"7px",border:"1px solid",
+                          background:pc.bg,color:pc.text,borderColor:pc.border,fontWeight:500}},coffee.processing),
+        h("span",{style:{fontSize:"11px",padding:"3px 9px",borderRadius:"7px",background:"#F0EDE8",color:P.inkL}},coffee.variety)
+      ),
+      h("div",{style:{display:"flex",gap:"5px",flexWrap:"wrap",marginBottom:"14px"}},
+        (coffee.tastingNotes||[]).map((n,i)=>h("span",{key:i,style:{fontSize:"11px",padding:"2px 9px",borderRadius:"18px",
+          background:P.cream,color:P.inkL,border:`1px solid ${P.border}`}},n))
+      ),
+      h("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",paddingTop:"10px",borderTop:`1px solid ${P.border}`}},
+        h("div",{style:{display:"flex",gap:"8px"}},
+          h("span",{style:{fontSize:"14px",color:P.inkM},title:"V60"},"▽"),
+          h("span",{style:{fontSize:"14px",color:P.inkM},title:"B75"},"⬡"),
+          coffee.espresso && h("span",{style:{fontSize:"14px",color:P.inkM},title:"Espresso"},"◈")
+        ),
+        h("button",{
+          style:{width:"30px",height:"30px",borderRadius:"50%",border:`1px solid ${comparing?P.accent:P.border}`,
+                 background:comparing?P.accent:"transparent",color:comparing?"#fff":P.inkM,
+                 cursor:"pointer",fontSize:"13px",transition:"all 0.2s"},
+          onClick:e=>{e.stopPropagation();onCompare();}
+        }, comparing ? "✓" : "⟷")
+      )
+    )
+  );
+}
+
+// ── CoffeeDetail ─────────────────────────────────────────────────
+function CoffeeDetail({coffee,activeTab,setTab,onBack}) {
+  const tabs = [
+    {id:"info",label:"Herkomst & info"},
+    {id:"flavor",label:"Smaakprofiel"},
+    {id:"v60",label:"V60"},
+    {id:"b75",label:"B75"},
+    ...(coffee.espresso?[{id:"espresso",label:"Espresso"}]:[])
+  ];
+
+  return h("main",{style:{maxWidth:"860px",margin:"0 auto",padding:"20px 16px"}},
+    h("button",{style:{fontFamily:FB,fontSize:"14px",color:P.accent,background:"none",border:"none",
+                       cursor:"pointer",padding:"6px 0",fontWeight:500,marginBottom:"14px"},onClick:onBack},"← Terug naar collectie"),
+
+    // Hero
+    h("div",{style:{borderRadius:"18px",padding:"36px 28px",marginBottom:"20px",background:roastGrad(coffee.roastLevel)}},
+      h("span",{style:{fontSize:"13px",color:"rgba(255,255,255,0.8)",display:"block",marginBottom:"6px"}},
+        `${flag(coffee.country)} ${coffee.country} · ${coffee.region}`),
+      h("h2",{style:{fontFamily:FD,fontSize:"28px",fontWeight:700,color:"#fff",margin:"0 0 3px",lineHeight:1.2}},coffee.name),
+      h("p",{style:{fontSize:"15px",color:"rgba(255,255,255,0.85)",margin:"0 0 14px"}},coffee.roaster),
+      h("div",{style:{display:"flex",gap:"7px",flexWrap:"wrap"}},
+        [coffee.roastLevel+" — "+coffee.roastType, coffee.processing, coffee.variety].map((b,i)=>
+          h("span",{key:i,style:{fontSize:"12px",padding:"4px 12px",borderRadius:"18px",
+                                  background:"rgba(255,255,255,0.2)",color:"#fff",fontWeight:500}},b))
+      )
+    ),
+
+    // Tabs
+    h("div",{className:"tabs-row",style:{display:"flex",gap:"2px",marginBottom:"20px",
+              borderBottom:`1px solid ${P.border}`,overflowX:"auto",WebkitOverflowScrolling:"touch"}},
+      tabs.map(t=>h("button",{key:t.id,
+        style:{fontFamily:FB,fontSize:"13px",padding:"9px 16px",border:"none",cursor:"pointer",fontWeight:500,
+               whiteSpace:"nowrap",background:"transparent",transition:"all 0.2s",
+               color:activeTab===t.id?P.accent:P.inkM,
+               borderBottom:activeTab===t.id?`2px solid ${P.accent}`:"2px solid transparent"},
+        onClick:()=>setTab(t.id)
+      },t.label))
+    ),
+
+    // Content
+    h("div",{style:{animation:"fadeInUp 0.3s ease both"}},
+      activeTab==="info" && h("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"14px"}},
+        h(InfoBlock,{label:"Land",value:`${flag(coffee.country)} ${coffee.country}`}),
+        h(InfoBlock,{label:"Regio",value:coffee.region}),
+        h(InfoBlock,{label:"Producent",value:coffee.producer}),
+        h(InfoBlock,{label:"Hoogte",value:coffee.altitude}),
+        h(InfoBlock,{label:"Vari\u00ebte\u00ebt",value:coffee.variety}),
+        h(InfoBlock,{label:"Verwerking",value:coffee.processing}),
+        h("div",{style:{gridColumn:"1/-1",padding:"16px",background:P.warm,borderRadius:"12px",border:`1px solid ${P.border}`}},
+          h("h4",{style:{fontSize:"11px",fontWeight:600,color:P.inkM,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.5px"}},"Verwerkingsproces"),
+          h("p",{style:{fontSize:"14px",color:P.inkL,margin:0,lineHeight:1.7}},coffee.processingDetail)
+        ),
+        h("div",{style:{gridColumn:"1/-1",padding:"16px",background:P.warm,borderRadius:"12px",border:`1px solid ${P.border}`}},
+          h("h4",{style:{fontSize:"11px",fontWeight:600,color:P.inkM,margin:"0 0 6px",textTransform:"uppercase",letterSpacing:"0.5px"}},"Rusttijd"),
+          h("p",{style:{fontSize:"14px",color:P.inkL,margin:0,lineHeight:1.7}},coffee.restDays)
+        )
+      ),
+
+      activeTab==="flavor" && h("div",null,
+        h("div",{style:{display:"flex",gap:"9px",flexWrap:"wrap",marginBottom:"20px"}},
+          (coffee.tastingNotes||[]).map((n,i)=>h("span",{key:i,style:{fontSize:"14px",padding:"7px 18px",borderRadius:"22px",
+            background:P.warm,border:`1px solid ${P.border}`,color:P.ink,fontWeight:500}},n))
+        ),
+        h("p",{style:{fontSize:"15px",lineHeight:1.8,color:P.inkL}},coffee.flavorDescription)
+      ),
+
+      activeTab==="v60" && coffee.brewV60 && h(BrewCard,{title:"Hario V60",icon:"▽",recipe:coffee.brewV60,color:"#E65100"}),
+      activeTab==="b75" && coffee.brewB75 && h(BrewCard,{title:"Timemore B75 Flat Bottom",icon:"⬡",recipe:coffee.brewB75,isB75:true,color:"#2E7D32"}),
+      activeTab==="espresso" && coffee.espresso && h(EspressoCard,{recipe:coffee.espresso})
+    )
+  );
+}
+
+// ── CompareView ──────────────────────────────────────────────────
+function CompareView({coffees,onBack,onClear}) {
+  const fields = [
+    {label:"Brander",get:c=>c.roaster},
+    {label:"Land",get:c=>`${flag(c.country)} ${c.country}`},
+    {label:"Regio",get:c=>c.region},
+    {label:"Hoogte",get:c=>c.altitude},
+    {label:"Vari\u00ebte\u00ebt",get:c=>c.variety},
+    {label:"Verwerking",get:c=>c.processing},
+    {label:"Branding",get:c=>c.roastLevel},
+    {label:"Type",get:c=>c.roastType},
+    {label:"Smaak",get:c=>(c.tastingNotes||[]).join(", ")},
+    {label:"V60 maalstand",get:c=>c.brewV60?.grindBricks||"—"},
+    {label:"B75 maalstand",get:c=>c.brewB75?.grindBricks||"—"},
+    {label:"Espresso dosis",get:c=>c.espresso?.dose||"—"},
+  ];
+  const cols = `160px repeat(${coffees.length},1fr)`;
+
+  return h("main",{style:{maxWidth:"900px",margin:"0 auto",padding:"20px 16px"}},
+    h("div",{style:{display:"flex",gap:"10px",marginBottom:"20px"}},
+      h("button",{style:{fontFamily:FB,fontSize:"14px",color:P.accent,background:"none",border:"none",cursor:"pointer",fontWeight:500},onClick:onBack},"← Terug"),
+      h("button",{style:{fontFamily:FB,fontSize:"14px",color:"#C62828",background:"none",border:"none",cursor:"pointer",fontWeight:500},onClick:onClear},"Vergelijking wissen")
+    ),
+    h("h2",{style:{fontFamily:FD,fontSize:"22px",fontWeight:700,marginBottom:"16px"}},"Vergelijking"),
+    h("div",{style:{borderRadius:"14px",overflow:"hidden",border:`1px solid ${P.border}`,overflowX:"auto"}},
+      h("div",{style:{display:"grid",gridTemplateColumns:cols,minWidth:"500px"}},
+        h("div",{style:{background:P.warm,padding:"12px 14px"}}),
+        ...coffees.map(c=>h("div",{key:c.id,style:{padding:"14px",background:roastGrad(c.roastLevel)}},
+          h("strong",{style:{color:"#fff",fontSize:"13px"}},c.name)
+        ))
+      ),
+      ...fields.map((f,i)=>h("div",{key:f.label,style:{display:"grid",gridTemplateColumns:cols,
+          background:i%2===0?"#FAFAF8":"#fff",minWidth:"500px"}},
+        h("div",{style:{padding:"10px 14px",fontSize:"11px",fontWeight:600,color:P.inkM,textTransform:"uppercase",
+                         letterSpacing:"0.3px",display:"flex",alignItems:"center",borderRight:`1px solid ${P.border}`,
+                         background:P.warm}},f.label),
+        ...coffees.map(c=>h("div",{key:c.id,style:{padding:"10px 14px",fontSize:"13px",color:P.ink,
+                                                     display:"flex",alignItems:"center",borderRight:`1px solid ${P.border}`}},f.get(c)||"—"))
+      ))
+    )
+  );
+}
+
+// ── App ──────────────────────────────────────────────────────────
+function App() {
+  const [coffees,setCoffees]   = useState(()=>loadCollection());
+  const [view,setView]         = useState("grid");
+  const [selected,setSelected] = useState(null);
+  const [activeTab,setTab]     = useState("info");
+  const [search,setSearch]     = useState("");
+  const [fCountry,setFC]       = useState("all");
+  const [fProc,setFP]          = useState("all");
+  const [fRoast,setFR]         = useState("all");
+  const [compare,setCompare]   = useState([]);
+  const [showInfo,setShowInfo] = useState(false);
+
+  const countries    = [...new Set(coffees.map(c=>c.country))].sort();
+  const processings  = [...new Set(coffees.map(c=>c.processing))].sort();
+  const roasts       = [...new Set(coffees.map(c=>c.roastLevel))].sort();
+
+  const filtered = coffees.filter(c=>{
+    const t = search.toLowerCase();
+    return (!t || [c.name,c.roaster,c.country,...(c.tastingNotes||[]),c.variety].some(v=>v.toLowerCase().includes(t)))
+      && (fCountry==="all"||c.country===fCountry)
+      && (fProc==="all"||c.processing===fProc)
+      && (fRoast==="all"||c.roastLevel===fRoast);
+  });
+
+  const toggleCompare = coffee => setCompare(prev=>{
+    if (prev.find(c=>c.id===coffee.id)) return prev.filter(c=>c.id!==coffee.id);
+    if (prev.length>=3) return prev;
+    return [...prev,coffee];
+  });
+
+  const selStyle = {padding:"7px 12px",border:`1px solid ${P.border}`,borderRadius:"9px",
+                    fontSize:"13px",fontFamily:FB,background:P.warm,color:P.ink,cursor:"pointer",outline:"none"};
+
+  return h("div",{style:{fontFamily:FB,background:P.cream,color:P.ink,minHeight:"100vh",lineHeight:1.6}},
+
+    // Header
+    h("header",{style:{background:P.warm,borderBottom:`1px solid ${P.border}`,position:"sticky",top:0,zIndex:100}},
+      h("div",{style:{maxWidth:"1200px",margin:"0 auto",padding:"14px 20px",display:"flex",
+                       justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"10px"}},
+        h("div",{style:{display:"flex",alignItems:"center",gap:"12px"}},
+          h("span",{style:{fontSize:"26px",color:P.accent,fontWeight:700}},"◉"),
+          h("div",null,
+            h("h1",{style:{fontFamily:FD,fontSize:"20px",fontWeight:700,margin:0,letterSpacing:"-0.5px"}},"Koffiebonenlogboek"),
+            h("p",{style:{fontSize:"12px",color:P.inkM,margin:0}},`${coffees.length} bonen in collectie`)
+          )
+        ),
+        h("nav",{style:{display:"flex",gap:"7px"}},
+          h("button",{
+            style:{fontFamily:FB,fontSize:"13px",padding:"7px 16px",border:`1px solid ${P.border}`,borderRadius:"22px",
+                   cursor:"pointer",fontWeight:500,transition:"all 0.2s",
+                   background:view==="grid"?P.ink:"transparent",color:view==="grid"?"#fff":P.inkL,
+                   borderColor:view==="grid"?P.ink:P.border},
+            onClick:()=>{setView("grid");setSelected(null);}
+          },"Collectie"),
+          compare.length>=2 && h("button",{
+            style:{fontFamily:FB,fontSize:"13px",padding:"7px 16px",border:"none",borderRadius:"22px",
+                   cursor:"pointer",fontWeight:500,background:P.accent,color:"#fff"},
+            onClick:()=>setView("compare")
+          },`Vergelijk (${compare.length})`)
+        )
+      )
+    ),
+
+    // Grid
+    view==="grid" && !selected && h("main",{style:{maxWidth:"1200px",margin:"0 auto",padding:"20px 16px"}},
+      // Search
+      h("div",{style:{marginBottom:"20px"}},
+        h("div",{style:{position:"relative",marginBottom:"10px"}},
+          h("span",{style:{position:"absolute",left:"14px",top:"50%",transform:"translateY(-50%)",fontSize:"17px",color:P.inkM}},"⌕"),
+          h("input",{style:{width:"100%",padding:"12px 40px 12px 42px",border:`1px solid ${P.border}`,borderRadius:"12px",
+                             fontSize:"14px",fontFamily:FB,background:P.warm,color:P.ink,outline:"none",boxSizing:"border-box"},
+            type:"text",placeholder:"Zoek op naam, brander, herkomst, smaak...",
+            value:search,onChange:e=>setSearch(e.target.value)
+          }),
+          search && h("button",{style:{position:"absolute",right:"12px",top:"50%",transform:"translateY(-50%)",
+                                        background:"none",border:"none",fontSize:"15px",color:P.inkM,cursor:"pointer"},
+                                 onClick:()=>setSearch("")},"✕")
+        ),
+        h("div",{style:{display:"flex",gap:"8px",flexWrap:"wrap"}},
+          h("select",{style:selStyle,value:fCountry,onChange:e=>setFC(e.target.value)},
+            h("option",{value:"all"},"Alle landen"),
+            ...countries.map(c=>h("option",{key:c,value:c},`${flag(c)} ${c}`))
+          ),
+          h("select",{style:selStyle,value:fProc,onChange:e=>setFP(e.target.value)},
+            h("option",{value:"all"},"Alle verwerkingen"),
+            ...processings.map(p=>h("option",{key:p,value:p},p))
+          ),
+          h("select",{style:selStyle,value:fRoast,onChange:e=>setFR(e.target.value)},
+            h("option",{value:"all"},"Alle brandingen"),
+            ...roasts.map(r=>h("option",{key:r,value:r},r))
+          )
+        )
+      ),
+
+      // Add banner
+      h("div",{style:{display:"flex",alignItems:"center",gap:"10px",padding:"13px 18px",background:P.warm,
+                       border:`1px dashed ${P.border}`,borderRadius:"12px",cursor:"pointer",marginBottom:"10px"},
+               onClick:()=>setShowInfo(!showInfo)},
+        h("span",{style:{fontSize:"18px",color:P.accent,fontWeight:600}},"+"),
+        h("span",{style:{flex:1,fontSize:"14px",fontWeight:500,color:P.inkL}},"Nieuwe koffie toevoegen"),
+        h("span",{style:{fontSize:"11px",color:P.inkM}},showInfo?"▲":"▼")
+      ),
+      showInfo && h("div",{style:{padding:"14px 18px",background:P.accentBg,borderRadius:"12px",marginBottom:"20px"}},
+        h("p",{style:{fontSize:"14px",color:P.inkL,margin:0,lineHeight:1.7}},
+          "Stuur een foto van je koffiebonenzak in dit chat-project. Ik analyseer de boon, zoek alle informatie op, en voeg het automatisch toe aan je logboek \u2014 compleet met zetrecepten voor je V60, B75 en Rancilio Silvia."
+        )
+      ),
+
+      // Cards
+      filtered.length===0
+        ? h("div",{style:{textAlign:"center",padding:"70px 20px"}},
+            h("span",{style:{fontSize:"44px",display:"block",marginBottom:"14px"}},"☕"),
+            h("p",{style:{fontFamily:FD,fontSize:"18px",fontWeight:500}},"Geen koffies gevonden"),
+            h("p",{style:{fontSize:"14px",color:P.inkM,marginTop:"6px"}},"Probeer een andere zoekopdracht")
+          )
+        : h("div",{style:{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"18px"}},
+            filtered.map((c,i)=>h(CoffeeCard,{key:c.id,coffee:c,idx:i,
+              onClick:()=>{setSelected(c);setView("detail");setTab("info");},
+              onCompare:()=>toggleCompare(c),
+              comparing:!!compare.find(x=>x.id===c.id)
+            }))
+          )
+    ),
+
+    view==="detail" && selected && h(CoffeeDetail,{coffee:selected,activeTab,setTab,
+      onBack:()=>{setView("grid");setSelected(null);}}),
+
+    view==="compare" && compare.length>=2 && h(CompareView,{coffees:compare,
+      onBack:()=>setView("grid"),
+      onClear:()=>{setCompare([]);setView("grid");}})
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+
+</body>
+</html>
